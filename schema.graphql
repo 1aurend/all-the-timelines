@@ -1,0 +1,78 @@
+type catIpsum {
+  id: String
+  updateId: String
+  type: String
+  projects: String
+  start: String
+  stop: String
+  headline: String
+  text: String
+  mediaLink: String
+  mediaCredit: String
+  mediaCaption: String
+  llDate: String
+  dateCreated: String
+  initials: String
+  bySlackId: String
+  personFromSlack: String
+  llPeopleNamePlaintext: String
+  week: String
+  deliverableLink: String
+  people: [peopleList]
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type peopleList {
+  id: String
+  name: String
+  lastName: String
+  firstName: String
+  emailPrimaryHuit: String
+  pronouns: [String]
+  role: [String]
+  active: [String]
+  affiliationRank: [String]
+  departmentConcentration: String
+  departmentUnit: [String]
+  tools: String
+  projectsClient: String
+  projectsStaff: String
+  projectsLlgf: String
+  gradYear: String
+  test: [catIpsum]
+}
+
+type Query {
+  template(id: String, updateId: String, type: String, people: String, projects: String, start: String, stop: String, headline: String, text: String, mediaLink: String, mediaCredit: String, mediaCaption: String, llDate: String, dateCreated: String, initials: String, bySlackId: String, personFromSlack: String, field17: String, llPeopleNamePlaintext: String, week: String, deliverableLink: String, _filter: JSON, _order_by: JSON, _page_size: JSON, _page: JSON): [template]
+  catIpsum(id: String, updateId: String, type: String, projects: String, start: String, stop: String, headline: String, text: String, mediaLink: String, mediaCredit: String, mediaCaption: String, llDate: String, dateCreated: String, initials: String, bySlackId: String, personFromSlack: String, llPeopleNamePlaintext: String, week: String, deliverableLink: String, _filter: JSON, _order_by: JSON, _page_size: JSON, _page: JSON): [catIpsum]
+  peopleList(id: String, name: String, lastName: String, firstName: String, emailPrimaryHuit: String, pronouns: [String], role: [String], active: [String], affiliationRank: [String], departmentConcentration: String, departmentUnit: [String], tools: String, projectsClient: String, projectsStaff: String, projectsLlgf: String, gradYear: String, _filter: JSON, _order_by: JSON, _page_size: JSON, _page: JSON): [peopleList]
+}
+
+type template {
+  id: String
+  updateId: String
+  type: String
+  people: String
+  projects: String
+  start: String
+  stop: String
+  headline: String
+  text: String
+  mediaLink: String
+  mediaCredit: String
+  mediaCaption: String
+  llDate: String
+  dateCreated: String
+  initials: String
+  bySlackId: String
+  personFromSlack: String
+  field17: String
+  llPeopleNamePlaintext: String
+  week: String
+  deliverableLink: String
+}
+
