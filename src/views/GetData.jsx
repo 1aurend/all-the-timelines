@@ -1,42 +1,31 @@
 /** @jsxImportSource theme-ui */
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Suspense } from 'react'
 import MainLine from './MainLine'
 import firebase from 'firebase'
-import graphql from 'babel-plugin-relay/macro'
-import {
-  RelayEnvironmentProvider,
-  loadQuery,
-} from 'react-relay/hooks'
-import RelayEnvironment from '../Relay/RelayEnvironment'
 
 
-export const TimelineDataQuery = graphql`
-    query GetDataTimelineDataQuery($name: String) {
-    Name(name: $name)   {
-        id
-        start
-        stop
-        text
-        headline
-        mediaLink
-        mediaCaption
-      }
-    }
-  `
-
-export default function GetData() {
+export default function GetData({ ready }) {
   const { id } = useParams()
+  const [data, setData] = useState(null)
 
-  const preloadedQuery = loadQuery(RelayEnvironment, TimelineDataQuery, {
-    query: id
-  })
+  useEffect(() => {
+    if (ready) {
+      firebase.functions().useEmulator("localhost", 5001)
+      const atTest = firebase.functions().httpsCallable('getTimelineData')
+      const fetch = async () => {
+        const atData = await atTest({table: id})
+        setData(atData.data)
+      }
+      fetch()
+    }
+  }, [ready, id])
+
 
   return (
-    <RelayEnvironmentProvider environment={RelayEnvironment}>
-      <Suspense fallback={'Loading...'}>
-        <MainLine preloadedQuery={preloadedQuery} id={id}/>
-      </Suspense>
-    </RelayEnvironmentProvider>
-  )
+    <Suspense fallback={'Loading...'}>
+      {JSON.stringify(data, null, 2)}
+    </Suspense>
+)
 }

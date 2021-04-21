@@ -1,11 +1,11 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
-import Router from './Router'
+import Firebase from './data/Firebase'
 import reportWebVitals from './reportWebVitals'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router />
+    <Firebase />
   </React.StrictMode>,
   document.getElementById('root')
 );

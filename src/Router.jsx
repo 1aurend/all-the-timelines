@@ -8,17 +8,22 @@ import Splash from './views/Splash'
 import GetData from './views/GetData'
 
 
-export default function AppRouter() {
+export default function AppRouter({ ready }) {
   return (
     <Router>
       <Switch>
         <Route exact path='/'>
-          <Splash/>
+          <Splash ready={ready}/>
         </Route>
         <Route path='/:id'>
-          <GetData/>
+          <GetData ready={ready}/>
         </Route>
       </Switch>
     </Router>
   )
 }
+
+
+// <Route path='/:id'>
+//   <GetData/>
+// </Route>
