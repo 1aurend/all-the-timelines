@@ -5,20 +5,19 @@ const listRecordsAsync = (table, base) => {
   return new Promise((resolve, reject) => {
     base(table)
       .select({
-        fields: [ 'Name' ],
-        // fields: [
-        //   'UpdateID',
-        //   'Type',
-        //   'Projects',
-        //   'Start',
-        //   'Stop',
-        //   'Headline',
-        //   'Text',
-        //   'MediaLink',
-        //   'MediaCredit',
-        //   'MediaCaption',
-        // ],
-        view: 'All'
+        // fields: [ 'Name' ],
+        fields: [
+          'UpdateID',
+          'Type',
+          'Projects',
+          'Start',
+          'Stop',
+          'Headline',
+          'Text',
+          'MediaLink',
+          'MediaCredit',
+          'MediaCaption',
+        ],
       })
       .all((err, records) => {
         if (err) {

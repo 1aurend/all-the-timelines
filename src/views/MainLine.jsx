@@ -1,10 +1,23 @@
 /** @jsxImportSource theme-ui */
-import { TimelineDataQuery } from './GetData'
 
-export default function MainLine({preloadedQuery}) {
+export default function MainLine({ data }) {
   return (
-    <div>
-      'hello'
+    <div
+      id='vert-line'
+      sx={{
+        width:'30vw',
+        height:'100vh',
+        position:'sticky',
+        top:0,
+        pl:'20vw',
+        zIndex:0
+      }}>
+      <div
+        sx={{
+          width:'1.5vw',
+          height:'100vh',
+          bg:'black',
+        }}></div>
     </div>
   )
 }

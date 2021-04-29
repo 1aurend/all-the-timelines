@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Suspense } from 'react'
-import MainLine from './MainLine'
+import Layout from './Layout'
 import firebase from 'firebase'
 
 
@@ -25,7 +25,7 @@ export default function GetData({ ready }) {
 
   return (
     <Suspense fallback={'Loading...'}>
-      {JSON.stringify(data, null, 2)}
+      <Layout data={data}/>
     </Suspense>
 )
 }
