@@ -1,16 +1,17 @@
 /** @jsxImportSource theme-ui */
 
 
-export default function ItemLayout({ content }) {
+export default function ItemLayout({ content, i }) {
 
   return (
-    <article
+    <section
+      className='timeline-item'
       sx={{
         height: '50vh',
-        border: '2px solid blue',
-        pl: '20%',
+        border: '2px solid orange',
         overflow:'hidden',
-        mb:'20vh'
+        mb:'20vh',
+        flexShrink:0
       }}>
       <div
         id='circle'
@@ -20,9 +21,10 @@ export default function ItemLayout({ content }) {
           borderRadius:'50%',
           bg:'white',
           border:'1px solid black',
-          display:'inline-block'
+          display:'inline-block',
+          ml:'-3vw'
         }}></div>
       {JSON.stringify(content)}
-    </article>
+    </section>
   )
 }

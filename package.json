@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.8.3",
     "airtable": "^0.10.1",
     "airtable-graphql": "^1.0.9",
+    "body-scroll-lock": "^3.1.5",
     "firebase": "^8.3.2",
     "firebase-admin": "^9.6.0",
     "firebase-functions": "^3.13.2",
@@ -17,6 +18,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "relay-runtime": "^11.0.1",
+    "scrollama": "^2.2.2",
     "theme-ui": "^0.6.2",
     "web-vitals": "^1.1.1"
   },

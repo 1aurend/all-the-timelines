@@ -7,37 +7,35 @@ export default function Layout({ data }) {
   if (!data) {
     return 'Loading...'
   }
-  console.log(data)
-  const items = data.map(item => <ItemLayout content={item}/>)
 
   return (
     <main
       sx={{
-        width:'90vw',
-        height:'100%',
+        width:'100vw',
+        height:'auto',
         m: 0,
-        p: '5%'
       }}>
-      <header
+      <div
         sx={{
-          height: '35vh',
-          width: '90vw',
+          height:'100vh',
+          width:'20vw',
+          flexShrink:0,
           bg:'orange',
-          fontSize: '2em'
+          fontSize:'2em',
+          position:'sticky',
+          top:0,
+          left:0
         }}>
-        Title Goes Here
-      </header>
+        Static Title and Nav Pane
+      </div>
+      <MainLine data={data}/>
       <section
         id='timeline'>
-        <MainLine/>
         <div
           id='items-container'
           sx={{
-            mt:'-80vh',
             display:'relative',
-            zIndex:10
           }}>
-          {items}
         </div>
       </section>
     </main>
