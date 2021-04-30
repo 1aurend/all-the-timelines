@@ -22,7 +22,7 @@ export default function Layout({ data }) {
           flexShrink:0,
           bg:'orange',
           fontSize:'2em',
-          position:'sticky',
+          position:'fixed',
           top:0,
           left:0
         }}>

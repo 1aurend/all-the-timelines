@@ -16,15 +16,17 @@ export default function MainLine({ data }) {
   )
 
   useEffect(() => {
-    if (scrollable.current) {
-      disableBodyScroll(scrollable.current)
-    }
+    // if (scrollable.current) {
+    //   disableBodyScroll(scrollable.current)
+    // }
   }, [])
 
   const items = data.map((item, i) => <ItemLayout content={item} key={i} i={i}/>)
   useEffect(() => {
     const expandItem = res => {
-      if (res.direction === 'up') {
+      console.log('out here')
+      if (res.direction === 'down') {
+        console.log('here')
         setActive({...active, [res.index]:true})
       }
     }
@@ -47,7 +49,6 @@ export default function MainLine({ data }) {
       sx={{
         display:'flex',
         height:'100vh',
-        overflow:'scroll',
         flexDirection:'column',
         justifyContent:'flex-start',
         position:'absolute',
@@ -61,7 +62,7 @@ export default function MainLine({ data }) {
           width:'1.5vw',
           height:'100vh',
           bg:'black',
-          position:'absolute',
+          position:'fixed',
           left:'20vw',
           top:0
         }}>
