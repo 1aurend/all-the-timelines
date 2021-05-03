@@ -7,12 +7,13 @@ import {
 import { disableBodyScroll } from 'body-scroll-lock'
 import ItemLayout from './ItemLayout'
 import createScrollamaTrigger from '../utils/createScrollamaTrigger'
+import scrollama from 'scrollama'
+
 
 export default function MainLine({ data }) {
   const scrollable = useRef(null)
-  const [active, setActive] = useState(Array
-    .from('false'.repeat(data.length))
-    .reduce((acc, val, i) => {return {...acc, [i]:val}}, {})
+  const [active, setActive] = useState([...Array(data.length).keys()]
+    .reduce((acc, val) => {return {...acc, [val]:false}}, {})
   )
 
   useEffect(() => {
@@ -21,23 +22,51 @@ export default function MainLine({ data }) {
     // }
   }, [])
 
-  const items = data.map((item, i) => <ItemLayout content={item} key={i} i={i}/>)
+  const items = data.map((item, i) => <ItemLayout content={item} key={i} i={i} active={active[i]}/>)
   useEffect(() => {
     const expandItem = res => {
-      console.log('out here')
+      console.log(res)
       if (res.direction === 'down') {
         console.log('here')
-        setActive({...active, [res.index]:true})
+        setActive(active => {return {...active, [res.index]:true}})
       }
     }
+    const collapseItem = res => {
+      if (res.direction === 'down') {
+        setActive(active => {return {...active, [res.index]:false}})
+      }
+    }
+    const expandItemUp = res => {
+      console.log(res)
+      if (res.direction === 'up') {
+        console.log('here')
+        setActive(active => {return {...active, [res.index]:true}})
+      }
+    }
+    const collapseItemUp = res => {
+      if (res.direction === 'up') {
+        setActive(active => {return {...active, [res.index]:false}})
+      }
+    }
+    const log = res => console.log(res)
     const enterParams = {
       id:'timeline-item',
       offset:.65,
       enter:expandItem,
-      parent:scrollable.current
+      exit:collapseItemUp,
+      parent:null
+    }
+    const exitParams = {
+      id:'timeline-item',
+      offset:.25,
+      exit:collapseItem,
+      enter:expandItemUp,
+      parent:null
     }
     createScrollamaTrigger(enterParams)
-  }, [active])
+    createScrollamaTrigger(exitParams)
+    return () => scrollama.destroy()
+  }, [])
 
   console.log(active)
 
@@ -53,7 +82,9 @@ export default function MainLine({ data }) {
         justifyContent:'flex-start',
         position:'absolute',
         left:'21.5vw',
-        top:0
+        top:0,
+        pb:'200vh',
+        pt:'80vh'
       }}>
       {items}
     </div>

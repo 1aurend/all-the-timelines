@@ -1,14 +1,14 @@
 /** @jsxImportSource theme-ui */
 
 
-export default function ItemLayout({ content, i }) {
+export default function ItemLayout({ content, i, active }) {
 
   return (
     <section
       className='timeline-item'
       sx={{
-        height: '50vh',
-        border: '2px solid orange',
+        height:'50vh',
+        border:`2px solid ${active? 'blue' : 'orange'}`,
         overflow:'hidden',
         mb:'20vh',
         flexShrink:0

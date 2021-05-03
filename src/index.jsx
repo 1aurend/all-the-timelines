@@ -2,6 +2,7 @@ import * as React from 'react'
 import ReactDOM from 'react-dom'
 import Firebase from './data/Firebase'
 import reportWebVitals from './reportWebVitals'
+import Router from './Router'
 
 ReactDOM.render(
   <React.StrictMode>

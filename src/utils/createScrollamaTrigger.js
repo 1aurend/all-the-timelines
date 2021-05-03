@@ -10,7 +10,7 @@ const createScrollamaTrigger = params => {
       progress: !!progress,
       threshold: 4,
       debug: true,
-      parent:parent
+      // parent:parent
     })
     if (!!enter) {
       trigger.onStepEnter(enter)

@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom'
 import Splash from './views/Splash'
 import GetData from './views/GetData'
+import Firebase from './data/Firebase'
 
 
 export default function AppRouter({ ready }) {
