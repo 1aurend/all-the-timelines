@@ -51,14 +51,14 @@ export default function MainLine({ data }) {
     const log = res => console.log(res)
     const enterParams = {
       id:'timeline-item',
-      offset:.65,
+      offset:.8,
       enter:expandItem,
       exit:collapseItemUp,
       parent:null
     }
     const exitParams = {
       id:'timeline-item',
-      offset:.25,
+      offset:.2,
       exit:collapseItem,
       enter:expandItemUp,
       parent:null
@@ -84,7 +84,7 @@ export default function MainLine({ data }) {
         left:'21.5vw',
         top:0,
         pb:'200vh',
-        pt:'80vh'
+        pt:'90vh'
       }}>
       {items}
     </div>

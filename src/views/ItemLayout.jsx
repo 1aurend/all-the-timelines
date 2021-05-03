@@ -1,11 +1,16 @@
 /** @jsxImportSource theme-ui */
-
+import { motion } from 'framer-motion'
 
 export default function ItemLayout({ content, i, active }) {
-
   return (
-    <section
+    <motion.section
       className='timeline-item'
+      animate={{
+        width:active? '75vw' : '20px',
+        opacity:active? 1 : .4
+      }}
+      transition={{ ease:'easeIn', duration:1 }}
+        initial={false}
       sx={{
         height:'50vh',
         border:`2px solid ${active? 'blue' : 'orange'}`,
@@ -25,6 +30,6 @@ export default function ItemLayout({ content, i, active }) {
           ml:'-3vw'
         }}></div>
       {JSON.stringify(content)}
-    </section>
+    </motion.section>
   )
 }
