@@ -1,13 +1,14 @@
 /** @jsxImportSource theme-ui */
 import { motion } from 'framer-motion'
 
-export default function ItemLayout({ content, i, active }) {
+export default function ItemLayout({ content, i, active, squish }) {
   return (
     <motion.section
       className='timeline-item'
       animate={{
         width:active? '75vw' : '20px',
-        opacity:active? 1 : .4
+        opacity:active? 1 : .4,
+        transform:squish? 'scaleY(.05)' : 'scaleY(1)'
       }}
       transition={{ ease:'easeIn', duration:1 }}
         initial={false}
@@ -16,19 +17,8 @@ export default function ItemLayout({ content, i, active }) {
         border:`2px solid ${active? 'blue' : 'orange'}`,
         overflow:'hidden',
         mb:'20vh',
-        flexShrink:0
+        flexShrink:0,
       }}>
-      <div
-        id='circle'
-        sx={{
-          height:'3vw',
-          width:'3vw',
-          borderRadius:'50%',
-          bg:'white',
-          border:'1px solid black',
-          display:'inline-block',
-          ml:'-3vw'
-        }}></div>
       {JSON.stringify(content)}
     </motion.section>
   )

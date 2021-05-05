@@ -1,4 +1,6 @@
 import scrollama from 'scrollama'
+import Result from 'folktale/result'
+
 
 const createScrollamaTrigger = params => {
   const {offset, progress, enter, exit, id, parent} = params
@@ -25,3 +27,10 @@ const createScrollamaTrigger = params => {
 }
 
 export default createScrollamaTrigger
+
+
+export const onTrigger = update => dir => res => (
+      res.direction === dir
+        ? Result.Ok(update(res))
+        : Result.Error('inactive direction')
+    )

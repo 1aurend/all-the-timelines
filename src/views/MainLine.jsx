@@ -6,14 +6,21 @@ import {
 } from 'react'
 import { disableBodyScroll } from 'body-scroll-lock'
 import ItemLayout from './ItemLayout'
-import createScrollamaTrigger from '../utils/createScrollamaTrigger'
+import createScrollamaTrigger, {
+  onTrigger
+} from '../utils/createScrollamaTrigger'
 import scrollama from 'scrollama'
 
 
 export default function MainLine({ data }) {
   const scrollable = useRef(null)
-  const [active, setActive] = useState([...Array(data.length).keys()]
-    .reduce((acc, val) => {return {...acc, [val]:false}}, {})
+  const [active, setActive] = useState(
+    [...Array(data.length).keys()]
+      .reduce((acc, val) => {return {...acc, [val]:false}}, {})
+  )
+  const [squish, setSquish] = useState(
+    [...Array(data.length).keys()]
+      .reduce((acc, val) => {return {...acc, [val]:true}}, {})
   )
 
   useEffect(() => {
@@ -22,49 +29,46 @@ export default function MainLine({ data }) {
     // }
   }, [])
 
-  const items = data.map((item, i) => <ItemLayout content={item} key={i} i={i} active={active[i]}/>)
+  const items = data.map((item, i) => <ItemLayout content={item} key={i} i={i} active={active[i]} squish={squish[i]}/>)
+
   useEffect(() => {
-    const expandItem = res => {
-      console.log(res)
-      if (res.direction === 'down') {
-        console.log('here')
-        setActive(active => {return {...active, [res.index]:true}})
-      }
-    }
-    const collapseItem = res => {
-      if (res.direction === 'down') {
-        setActive(active => {return {...active, [res.index]:false}})
-      }
-    }
-    const expandItemUp = res => {
-      console.log(res)
-      if (res.direction === 'up') {
-        console.log('here')
-        setActive(active => {return {...active, [res.index]:true}})
-      }
-    }
-    const collapseItemUp = res => {
-      if (res.direction === 'up') {
-        setActive(active => {return {...active, [res.index]:false}})
-      }
-    }
-    const log = res => console.log(res)
-    const enterParams = {
+    const drawer = onTrigger(res => setActive(active => {return {...active, [res.index]:!active[res.index]}}))
+    const shrink = onTrigger(res => setSquish(squish => {return {...squish, [res.index]:!squish[res.index]}}))
+
+    const activePaneBottom = {
       id:'timeline-item',
       offset:.8,
-      enter:expandItem,
-      exit:collapseItemUp,
+      enter:drawer('down'),
+      exit:drawer('up'),
       parent:null
     }
-    const exitParams = {
+    const activePaneTop = {
       id:'timeline-item',
       offset:.2,
-      exit:collapseItem,
-      enter:expandItemUp,
+      enter:drawer('up'),
+      exit:drawer('down'),
       parent:null
     }
-    createScrollamaTrigger(enterParams)
-    createScrollamaTrigger(exitParams)
+    createScrollamaTrigger(activePaneTop)
+    createScrollamaTrigger(activePaneBottom)
+
+    const topPileUp = {
+      id:'timeline-item',
+      offset:.05,
+      enter:shrink('up'),
+      exit:shrink('down'),
+      parent:null
+    }
+    const bottomPileUp = {
+      id:'timeline-item',
+      offset:.95,
+      enter:shrink('down'),
+      exit:shrink('up'),
+      parent:null
+    }
+    createScrollamaTrigger(topPileUp)
+    createScrollamaTrigger(bottomPileUp)
+
     return () => scrollama.destroy()
   }, [])
 
@@ -83,8 +87,8 @@ export default function MainLine({ data }) {
         position:'absolute',
         left:'21.5vw',
         top:0,
-        pb:'200vh',
-        pt:'90vh'
+        pb:'100vh',
+        pt:'100vh'
       }}>
       {items}
     </div>
