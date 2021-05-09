@@ -29,8 +29,9 @@ const createScrollamaTrigger = params => {
 export default createScrollamaTrigger
 
 
-export const onTrigger = update => dir => res => (
+export const onTrigger = update => dir => res => {
+  console.log(Result.Ok('12').map(x => x*2))
       res.direction === dir
         ? Result.Ok(update(res))
         : Result.Error('inactive direction')
-    )
+    }

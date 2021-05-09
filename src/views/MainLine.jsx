@@ -10,6 +10,7 @@ import createScrollamaTrigger, {
   onTrigger
 } from '../utils/createScrollamaTrigger'
 import scrollama from 'scrollama'
+import { orderByDate } from '../utils/orderByDate'
 
 
 export default function MainLine({ data }) {
@@ -29,24 +30,27 @@ export default function MainLine({ data }) {
     // }
   }, [])
 
-  const items = data.map((item, i) => <ItemLayout content={item} key={i} i={i} active={active[i]} squish={squish[i]}/>)
+  const items = orderByDate(data)
+    .map((item, i) => <ItemLayout content={item} key={i} i={i} active={active[i]} squish={squish[i]}/>)
 
   useEffect(() => {
-    const drawer = onTrigger(res => setActive(active => {return {...active, [res.index]:!active[res.index]}}))
-    const shrink = onTrigger(res => setSquish(squish => {return {...squish, [res.index]:!squish[res.index]}}))
+    const drawerOpen = onTrigger(res => setActive(active => {return {...active, [res.index]:true}}))
+    const drawerClose = onTrigger(res => setActive(active => {return {...active, [res.index]:false}}))
+    const shrink = onTrigger(res => setSquish(squish => {return {...squish, [res.index]:true}}))
+    const grow = onTrigger(res => setSquish(squish => {return {...squish, [res.index]:false}}))
 
     const activePaneBottom = {
       id:'timeline-item',
       offset:.8,
-      enter:drawer('down'),
-      exit:drawer('up'),
+      enter:drawerOpen('down'),
+      exit:drawerClose('up'),
       parent:null
     }
     const activePaneTop = {
       id:'timeline-item',
       offset:.2,
-      enter:drawer('up'),
-      exit:drawer('down'),
+      enter:drawerOpen('up'),
+      exit:drawerClose('down'),
       parent:null
     }
     createScrollamaTrigger(activePaneTop)
@@ -55,14 +59,14 @@ export default function MainLine({ data }) {
     const topPileUp = {
       id:'timeline-item',
       offset:.05,
-      enter:shrink('up'),
+      enter:grow('up'),
       exit:shrink('down'),
       parent:null
     }
     const bottomPileUp = {
       id:'timeline-item',
       offset:.95,
-      enter:shrink('down'),
+      enter:grow('down'),
       exit:shrink('up'),
       parent:null
     }
@@ -72,10 +76,18 @@ export default function MainLine({ data }) {
     return () => scrollama.destroy()
   }, [])
 
-  console.log(active)
-
   return (
     <>
+    <div
+      sx={{
+        width:'1.5vw',
+        height:'100vh',
+        bg:'black',
+        position:'fixed',
+        left:'20vw',
+        top:0
+      }}>
+    </div>
     <div
       className='timeline-items-container'
       ref={scrollable}
@@ -85,23 +97,13 @@ export default function MainLine({ data }) {
         flexDirection:'column',
         justifyContent:'flex-start',
         position:'absolute',
-        left:'21.5vw',
+        left:'20vw',
         top:0,
-        pb:'100vh',
-        pt:'100vh'
+        pb:'150vh',
+        pt:'25vh'
       }}>
       {items}
     </div>
-      <div
-        sx={{
-          width:'1.5vw',
-          height:'100vh',
-          bg:'black',
-          position:'fixed',
-          left:'20vw',
-          top:0
-        }}>
-      </div>
     </>
   )
 }

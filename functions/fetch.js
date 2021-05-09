@@ -17,6 +17,7 @@ const listRecordsAsync = (table, base) => {
           'MediaLink',
           'MediaCredit',
           'MediaCaption',
+          'People'
         ],
       })
       .all((err, records) => {
@@ -24,6 +25,18 @@ const listRecordsAsync = (table, base) => {
           reject(err)
           }
         resolve(records)
+      })
+    })
+}
+
+const populateLinks = base => table => record => {
+  return new Promise((resolve, reject) => {
+    base(table)
+      .find(record.fields.People[0], (err, record) => {
+        if (err) {
+          reject(err)
+          }
+        resolve(record)
       })
     })
 }
