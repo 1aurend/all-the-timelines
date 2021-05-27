@@ -1,24 +1,16 @@
 const Airtable = require('airtable')
 const functions = require('firebase-functions')
+const curry = require('ramda').curry
+const _ = require('ramda').__
+const compose = require('ramda').compose
+const map = require('ramda').map
 
-const listRecordsAsync = (table, base) => {
+const listRecordsAsync = curry(base => table => fields => {
+  console.log('test')
   return new Promise((resolve, reject) => {
     base(table)
       .select({
-        // fields: [ 'Name' ],
-        fields: [
-          'UpdateID',
-          'Type',
-          'Projects',
-          'Start',
-          'Stop',
-          'Headline',
-          'Text',
-          'MediaLink',
-          'MediaCredit',
-          'MediaCaption',
-          'People'
-        ],
+        fields: fields,
       })
       .all((err, records) => {
         if (err) {
@@ -27,25 +19,47 @@ const listRecordsAsync = (table, base) => {
         resolve(records)
       })
     })
-}
+})
 
-const populateLinks = base => table => record => {
-  return new Promise((resolve, reject) => {
-    base(table)
-      .find(record.fields.People[0], (err, record) => {
-        if (err) {
-          reject(err)
-          }
-        resolve(record)
+const populateLinks = curry(base => table => field => record => {
+  console.log('hello')
+  return Promise.allSettled(
+    record.fields[field].map(uid => (
+      new Promise((resolve, reject) => {
+        base(table)
+          .find(uid, (err, record) => {
+            if (err) {
+              reject(err)
+            }
+            resolve(record)
+          })
       })
-    })
-}
+    ))
+  )
+})
+const populatePeople = populateLinks(_,'peopleList','people')
 
+const lab3dFields = [
+  'order',
+  'people',
+  'start',
+  'end',
+  'headline',
+  'bodyText',
+  'mediaLink',
+  'mediaCaption'
+]
+const listLab3dRecords = listRecordsAsync(_,'Lab3D',lab3dFields)
 
-const getTimelineData = (table) => {
+const getTimelineData = async (table) => {
   const base = new Airtable({apiKey: functions.config().at.key})
     .base(functions.config().at.base)
-  return listRecordsAsync(table, base)
+  console.log(compose)
+  const getCleanRecords = compose(map(populatePeople(base)),listRecordsAsync)
+  console.log(getCleanRecords(base,'Lab3D',lab3dFields))
+  const data = await listRecordsAsync(base, 'Lab3D', lab3dFields)
+  console.log(data)
+  return listRecordsAsync(base, 'Lab3D', lab3dFields)
 }
 
 module.exports = getTimelineData

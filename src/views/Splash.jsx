@@ -5,6 +5,10 @@ import { useState, useEffect } from 'react'
 export default function Splash({ ready }) {
   const [data, setData] = useState(null)
 
+  const curry = require('ramda').curry
+  console.log(curry)
+
+
   useEffect(() => {
     if (ready) {
       console.log(firebase.app().name)

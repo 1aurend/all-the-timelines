@@ -7,6 +7,7 @@ export default function Layout({ data }) {
   if (!data) {
     return 'Loading...'
   }
+  console.log(data)
 
   return (
     <main
