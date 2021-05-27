@@ -4,8 +4,13 @@ const curry = require('ramda').curry
 const _ = require('ramda').__
 const compose = require('ramda').compose
 const map = require('ramda').map
+const prop = require('ramda').prop
+const fieldsMasterList = require('./fields')
 
-const listRecordsAsync = curry(base => table => fields => {
+const then =
+  curry((f, p) => p.then(f))
+
+const listRecordsAsync = curry((base, table, fields) => {
   console.log('test')
   return new Promise((resolve, reject) => {
     base(table)
@@ -21,45 +26,43 @@ const listRecordsAsync = curry(base => table => fields => {
     })
 })
 
-const populateLinks = curry(base => table => field => record => {
-  console.log('hello')
-  return Promise.allSettled(
-    record.fields[field].map(uid => (
-      new Promise((resolve, reject) => {
-        base(table)
-          .find(uid, (err, record) => {
-            if (err) {
-              reject(err)
-            }
-            resolve(record)
+const populateLinks = curry((base, table, field, targetField, record) => {
+  return record[field]
+    ? Promise.all(
+        record[field].map(uid => (
+          new Promise((resolve, reject) => {
+            base(table)
+              .find(uid, (err, record) => {
+                if (err) {
+                  reject(err)
+                }
+                resolve(record)
+              })
           })
+        ))
+      ).then(data => {
+        const values = data.map(item => item.fields[targetField])
+        return {...record, [field]: values}
       })
-    ))
-  )
+    : Promise.resolve(record)
 })
-const populatePeople = populateLinks(_,'peopleList','people')
+const populatePeople = populateLinks(_,'peopleList','people','Name')
 
-const lab3dFields = [
-  'order',
-  'people',
-  'start',
-  'end',
-  'headline',
-  'bodyText',
-  'mediaLink',
-  'mediaCaption'
-]
-const listLab3dRecords = listRecordsAsync(_,'Lab3D',lab3dFields)
+const timelinesBase = new Airtable({apiKey: functions.config().at.key})
+  .base(functions.config().at.base)
+const listTimelineRecords = listRecordsAsync(timelinesBase)
+const addPeopleToTimelineRecords = populatePeople(timelinesBase)
+
+const getCleanRecords = compose(
+  then(map(addPeopleToTimelineRecords)),
+  then(map(prop('fields'))),
+  listTimelineRecords
+)
 
 const getTimelineData = async (table) => {
-  const base = new Airtable({apiKey: functions.config().at.key})
-    .base(functions.config().at.base)
-  console.log(compose)
-  const getCleanRecords = compose(map(populatePeople(base)),listRecordsAsync)
-  console.log(getCleanRecords(base,'Lab3D',lab3dFields))
-  const data = await listRecordsAsync(base, 'Lab3D', lab3dFields)
-  console.log(data)
-  return listRecordsAsync(base, 'Lab3D', lab3dFields)
+  return Promise.all(
+    await getCleanRecords(table, fieldsMasterList[table]))
+      .then(data => {return data})
 }
 
 module.exports = getTimelineData
