@@ -53,16 +53,15 @@ const timelinesBase = new Airtable({apiKey: functions.config().at.key})
 const listTimelineRecords = listRecordsAsync(timelinesBase)
 const addPeopleToTimelineRecords = populatePeople(timelinesBase)
 
-const getCleanRecords = compose(
-  then(map(addPeopleToTimelineRecords)),
-  then(map(prop('fields'))),
-  listTimelineRecords
-)
 
-const getTimelineData = async (table) => {
-  return Promise.all(
-    await getCleanRecords(table, fieldsMasterList[table]))
-      .then(data => {return data})
+const getTimelineData = (table) => {
+  const getTimelineItems = compose(
+    then(records => Promise.all(records)),
+    then(map(addPeopleToTimelineRecords)),
+    then(map(prop('fields'))),
+    listTimelineRecords
+  )
+  return getTimelineItems(table, fieldsMasterList[table])
 }
 
 module.exports = getTimelineData
