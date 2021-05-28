@@ -1,14 +1,15 @@
 const Airtable = require('airtable')
 const functions = require('firebase-functions')
-const curry = require('ramda').curry
-const _ = require('ramda').__
-const compose = require('ramda').compose
-const map = require('ramda').map
-const prop = require('ramda').prop
 const fieldsMasterList = require('./fields')
 
-const then =
-  curry((f, p) => p.then(f))
+const R = require('ramda'),
+      curry = R.curry,
+      _ = R.__,
+      compose = R.compose,
+      map = R.map,
+      prop = R.prop
+
+const then = curry((f, p) => p.then(f))
 
 const listRecordsAsync = curry((base, table, fields) => {
   console.log('test')
@@ -48,11 +49,11 @@ const populateLinks = curry((base, table, field, targetField, record) => {
 })
 const populatePeople = populateLinks(_,'peopleList','people','Name')
 
+
 const timelinesBase = new Airtable({apiKey: functions.config().at.key})
   .base(functions.config().at.base)
 const listTimelineRecords = listRecordsAsync(timelinesBase)
 const addPeopleToTimelineRecords = populatePeople(timelinesBase)
-
 
 const getTimelineData = (table) => {
   const getTimelineItems = compose(

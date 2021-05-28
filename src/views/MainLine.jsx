@@ -4,13 +4,12 @@ import {
   useEffect,
   useState
 } from 'react'
-import { disableBodyScroll } from 'body-scroll-lock'
 import ItemLayout from './ItemLayout'
 import createScrollamaTrigger, {
   onTrigger
 } from '../utils/createScrollamaTrigger'
 import scrollama from 'scrollama'
-import { orderByDate } from '../utils/orderByDate'
+import { orderByDate, orderByNumber } from '../utils/orderByDate'
 
 
 export default function MainLine({ data }) {
@@ -24,13 +23,7 @@ export default function MainLine({ data }) {
       .reduce((acc, val) => {return {...acc, [val]:true}}, {})
   )
 
-  useEffect(() => {
-    // if (scrollable.current) {
-    //   disableBodyScroll(scrollable.current)
-    // }
-  }, [])
-
-  const items = orderByDate(data)
+  const items = orderByNumber(data)
     .map((item, i) => <ItemLayout content={item} key={i} i={i} active={active[i]} squish={squish[i]}/>)
 
   useEffect(() => {

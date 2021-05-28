@@ -7,7 +7,8 @@ const fieldsMasterList = {
     'headline',
     'bodyText',
     'mediaLink',
-    'mediaCaption'
+    'mediaCaption',
+    'abstract'
   ]
 }
 
